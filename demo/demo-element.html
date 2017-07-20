@@ -1,0 +1,95 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../icon-toggle.html">
+<link rel="import" href="../../polymer/lib/elements/dom-if.html">
+
+
+<dom-module id="demo-element">
+  <template>
+    <style>
+      :host {
+        font-family: sans-serif;
+        /* CSS custom properties  must started with --*/
+       --icon-toggle-color: lightgrey;
+       --icon-toggle-outline-color: black;
+       --icon-toggle-pressed-color: red;
+     };
+    </style>
+
+    <h3>Statically-configured icon-toggles</h3>
+
+     <!--You'll note that the markup above uses toggle-icon,
+     not toggleIcon property of the IconToggle class defined in  the icon-toogle.html.
+     Polymer represents camelCase property names using dash-case attribute names.
+      To learn more, see Property name to attribute name mapping in the Polymer library docs.
+
+      property:  toggle-icon = "xxxx"
+    -->
+    <icon-toggle toggle-icon="star"></icon-toggle>
+    <!-- pressed => default value = false  -->
+    <icon-toggle toggle-icon="star" pressed></icon-toggle>
+
+    <h3>Data-bound icon-toggle</h3>
+
+    <!-- use a computed binding to generate the message -->
+    <div><span>[[_message(isFav)]]</span></div>
+
+    <!-- curly brackets ({{}})  allow two-way binding
+    -->
+
+    <icon-toggle toggle-icon="favorite" pressed="{{isFav}}"></icon-toggle>
+
+    <div><span>[[_message1(isFav)]]</span></div>
+    <dom-if if="[[cache]]">
+      <template>
+        <icon-toggle toggle-icon="favorite" pressed></icon-toggle>
+        <icon-toggle toggle-icon="polymer" pressed></icon-toggle>
+        <icon-toggle toggle-icon="polymer"></icon-toggle>
+        <icon-toggle toggle-icon="polymer" pressed></icon-toggle>
+      </template>
+    </dom-if>
+  </template>
+
+  <script>
+    class DemoElement extends Polymer.Element {
+      static get is() { return "demo-element" }
+
+      static get properties() {
+        return {
+          cache: {
+            type: Boolean,
+            notify: true,
+            value: false,
+            reflectToAttribute: true
+          }
+        }
+      }
+
+
+      _message(fav) {
+       /*  console.log("message",fav); */
+        console.log(this.$);
+        if (fav) {
+          /* this.hidden = true;*/
+          this.cache = true;
+          return "You really like me!";
+        }
+        else {
+          this.cache= false;
+          return "Click  the icon below if you like me";
+        }
+      }
+
+      _message1(fav) {
+        if (fav) {
+          return "I really like you too"
+        }
+        else {
+          return ""
+        }
+      }
+    }
+
+    customElements.define(DemoElement.is, DemoElement);
+    </script>
+</dom-module>
